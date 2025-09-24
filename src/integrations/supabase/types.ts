@@ -14,7 +14,135 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      feedback: {
+        Row: {
+          admin_response: string | null
+          created_at: string
+          feedback_type: string
+          id: string
+          message: string
+          rating: number | null
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_response?: string | null
+          created_at?: string
+          feedback_type: string
+          id?: string
+          message: string
+          rating?: number | null
+          status?: string
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_response?: string | null
+          created_at?: string
+          feedback_type?: string
+          id?: string
+          message?: string
+          rating?: number | null
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pickup_requests: {
+        Row: {
+          address: string
+          assigned_recycler: string | null
+          created_at: string
+          device_types: string[]
+          email: string
+          estimated_weight: number | null
+          full_name: string
+          id: string
+          phone: string
+          pickup_date: string
+          pickup_time: string
+          special_instructions: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          assigned_recycler?: string | null
+          created_at?: string
+          device_types: string[]
+          email: string
+          estimated_weight?: number | null
+          full_name: string
+          id?: string
+          phone: string
+          pickup_date: string
+          pickup_time: string
+          special_instructions?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          assigned_recycler?: string | null
+          created_at?: string
+          device_types?: string[]
+          email?: string
+          estimated_weight?: number | null
+          full_name?: string
+          id?: string
+          phone?: string
+          pickup_date?: string
+          pickup_time?: string
+          special_instructions?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

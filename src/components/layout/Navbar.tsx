@@ -1,36 +1,36 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, Recycle, Home, Truck, BookOpen, BarChart3, MessageCircle, User, Shield, LogOut, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Recycle, Calendar, BookOpen, BarChart3, Phone } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/hooks/useAuth';
+
+const navItems = [
+  { name: 'Home', path: '/', icon: Home },
+  { name: 'Pickup', path: '/pickup', icon: Truck },
+  { name: 'Guidelines', path: '/guidelines', icon: BookOpen },
+  { name: 'Dashboard', path: '/dashboard', icon: BarChart3 },
+  { name: 'Feedback', path: '/feedback', icon: MessageSquare },
+  { name: 'Contact', path: '/contact', icon: MessageCircle },
+];
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
-  const navItems = [
-    { name: 'Home', path: '/', icon: Recycle },
-    { name: 'Schedule Pickup', path: '/pickup', icon: Calendar },
-    { name: 'Guidelines', path: '/guidelines', icon: BookOpen },
-    { name: 'Dashboard', path: '/dashboard', icon: BarChart3 },
-    { name: 'Contact', path: '/contact', icon: Phone },
-  ];
-
-  const isActive = (path: string) => location.pathname === path;
+  const navigate = useNavigate();
+  const { user, profile, signOut } = useAuth();
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-card">
-      <div className="container mx-auto px-4 lg:px-6">
-        <div className="flex items-center justify-between h-16">
+    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="p-2 bg-gradient-eco rounded-lg shadow-eco group-hover:shadow-elevated transition-all duration-300">
-              <Recycle className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">ReCircuit</h1>
-              <p className="text-xs text-muted-foreground">E-Waste Management</p>
-            </div>
-          </Link>
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center space-x-2">
+              <Recycle className="h-8 w-8 text-primary" />
+              <span className="text-xl font-bold">ReCircuit</span>
+            </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -40,66 +40,164 @@ const Navbar = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
-                    isActive(item.path)
+                  className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    location.pathname === item.path
                       ? 'text-primary bg-primary/10'
-                      : 'text-muted-foreground hover:text-primary hover:bg-primary/5'
+                      : 'text-muted-foreground hover:text-primary'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="h-4 w-4" />
                   <span>{item.name}</span>
                 </Link>
               );
             })}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Button variant="eco" size="sm" asChild>
-              <Link to="/pickup">Schedule Pickup</Link>
-            </Button>
+          {/* Desktop Auth & CTA */}
+          <div className="hidden md:flex items-center space-x-4">
+            {user ? (
+              <>
+                <Button asChild>
+                  <Link to="/pickup">Schedule Pickup</Link>
+                </Button>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      {profile?.full_name || 'Account'}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                      <BarChart3 className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
+                    </DropdownMenuItem>
+                    {profile?.role === 'admin' && (
+                      <DropdownMenuItem onClick={() => navigate('/admin')}>
+                        <Shield className="mr-2 h-4 w-4" />
+                        <span>Admin Panel</span>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => signOut()}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Sign Out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="flex items-center gap-2">
+                    Sign Up
+                    <X className="h-3 w-3 rotate-45" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => navigate('/auth?mode=signin&role=user')}>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>User Sign In</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/auth?mode=signin&role=admin')}>
+                    <Shield className="mr-2 h-4 w-4" />
+                    <span>Admin Sign In</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <Button
+              variant="ghost"
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md"
+            >
+              {isOpen ? (
+                <X className="block h-6 w-6" />
+              ) : (
+                <Menu className="block h-6 w-6" />
+              )}
+            </Button>
+          </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden border-t border-border bg-background">
-            <div className="py-4 space-y-2">
+        {/* Mobile menu */}
+        {isOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                      isActive(item.path)
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium ${
+                      location.pathname === item.path
                         ? 'text-primary bg-primary/10'
-                        : 'text-muted-foreground hover:text-primary hover:bg-primary/5'
+                        : 'text-muted-foreground hover:text-primary'
                     }`}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={() => setIsOpen(false)}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="h-5 w-5" />
                     <span>{item.name}</span>
                   </Link>
                 );
               })}
-              <div className="px-4 pt-4">
-                <Button variant="eco" className="w-full" asChild>
-                  <Link to="/pickup" onClick={() => setIsMenuOpen(false)}>
-                    Schedule Pickup
-                  </Link>
-                </Button>
-              </div>
+            </div>
+
+            {/* Mobile Auth & CTA */}
+            <div className="mt-4 space-y-2 px-2 pb-3">
+              {user ? (
+                <>
+                  <Button className="w-full" onClick={() => setIsOpen(false)}>
+                    <Link to="/pickup">Schedule Pickup</Link>
+                  </Button>
+                  <div className="pt-2 border-t">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Welcome, {profile?.full_name || 'User'}
+                    </p>
+                    <div className="space-y-1">
+                      <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/dashboard'); }}>
+                        <BarChart3 className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Button>
+                      {profile?.role === 'admin' && (
+                        <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/admin'); }}>
+                          <Shield className="mr-2 h-4 w-4" />
+                          Admin Panel
+                        </Button>
+                      )}
+                      <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); signOut(); }}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Sign Out
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="space-y-2">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start" 
+                    onClick={() => { setIsOpen(false); navigate('/auth?mode=signin&role=user'); }}
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    User Sign In
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start" 
+                    onClick={() => { setIsOpen(false); navigate('/auth?mode=signin&role=admin'); }}
+                  >
+                    <Shield className="mr-2 h-4 w-4" />
+                    Admin Sign In
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         )}
