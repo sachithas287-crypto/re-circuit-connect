@@ -13,6 +13,8 @@ import Guidelines from "./pages/Guidelines";
 import Dashboard from "./pages/Dashboard";
 import Feedback from "./pages/Feedback";
 import AdminDashboard from "./pages/AdminDashboard";
+import CollectorDashboard from "./pages/CollectorDashboard";
+import RegulatorDashboard from "./pages/RegulatorDashboard";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
@@ -36,6 +38,8 @@ const App = () => (
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/feedback" element={<Feedback />} />
                 <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/collector" element={<CollectorDashboard />} />
+                <Route path="/regulator" element={<RegulatorDashboard />} />
                 <Route path="/contact" element={<Contact />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

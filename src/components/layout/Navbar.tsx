@@ -73,12 +73,30 @@ const Navbar = () => {
                       <BarChart3 className="mr-2 h-4 w-4" />
                       <span>Dashboard</span>
                     </DropdownMenuItem>
-              {profile?.role === 'administrator' && (
-                      <DropdownMenuItem onClick={() => navigate('/admin')}>
-                        <Shield className="mr-2 h-4 w-4" />
-                        <span>Admin Panel</span>
-                      </DropdownMenuItem>
-                    )}
+                     {profile?.role === 'administrator' && (
+                       <DropdownMenuItem onClick={() => navigate('/admin')}>
+                         <Shield className="mr-2 h-4 w-4" />
+                         <span>Admin Panel</span>
+                       </DropdownMenuItem>
+                     )}
+                     {profile?.role === 'collector' && (
+                       <DropdownMenuItem onClick={() => navigate('/collector')}>
+                         <Truck className="mr-2 h-4 w-4" />
+                         <span>Collector Dashboard</span>
+                       </DropdownMenuItem>
+                     )}
+                     {profile?.role === 'regulator' && (
+                       <DropdownMenuItem onClick={() => navigate('/regulator')}>
+                         <Shield className="mr-2 h-4 w-4" />
+                         <span>Regulator Dashboard</span>
+                       </DropdownMenuItem>
+                     )}
+                     {profile?.role === 'recycler' && (
+                       <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                         <Recycle className="mr-2 h-4 w-4" />
+                         <span>Recycler Dashboard</span>
+                       </DropdownMenuItem>
+                     )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => signOut()}>
                       <LogOut className="mr-2 h-4 w-4" />
@@ -165,12 +183,30 @@ const Navbar = () => {
                         <BarChart3 className="mr-2 h-4 w-4" />
                         Dashboard
                       </Button>
-                      {profile?.role === 'administrator' && (
-                        <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/admin'); }}>
-                          <Shield className="mr-2 h-4 w-4" />
-                          Admin Panel
-                        </Button>
-                      )}
+                       {profile?.role === 'administrator' && (
+                         <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/admin'); }}>
+                           <Shield className="mr-2 h-4 w-4" />
+                           Admin Panel
+                         </Button>
+                       )}
+                       {profile?.role === 'collector' && (
+                         <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/collector'); }}>
+                           <Truck className="mr-2 h-4 w-4" />
+                           Collector Dashboard
+                         </Button>
+                       )}
+                       {profile?.role === 'regulator' && (
+                         <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/regulator'); }}>
+                           <Shield className="mr-2 h-4 w-4" />
+                           Regulator Dashboard
+                         </Button>
+                       )}
+                       {profile?.role === 'recycler' && (
+                         <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/dashboard'); }}>
+                           <Recycle className="mr-2 h-4 w-4" />
+                           Recycler Dashboard
+                         </Button>
+                       )}
                       <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); signOut(); }}>
                         <LogOut className="mr-2 h-4 w-4" />
                         Sign Out
