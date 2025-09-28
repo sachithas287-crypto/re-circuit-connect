@@ -73,7 +73,7 @@ const Navbar = () => {
                       <BarChart3 className="mr-2 h-4 w-4" />
                       <span>Dashboard</span>
                     </DropdownMenuItem>
-                    {profile?.role === 'admin' && (
+              {profile?.role === 'administrator' && (
                       <DropdownMenuItem onClick={() => navigate('/admin')}>
                         <Shield className="mr-2 h-4 w-4" />
                         <span>Admin Panel</span>
@@ -165,7 +165,7 @@ const Navbar = () => {
                         <BarChart3 className="mr-2 h-4 w-4" />
                         Dashboard
                       </Button>
-                      {profile?.role === 'admin' && (
+                      {profile?.role === 'administrator' && (
                         <Button variant="outline" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/admin'); }}>
                           <Shield className="mr-2 h-4 w-4" />
                           Admin Panel

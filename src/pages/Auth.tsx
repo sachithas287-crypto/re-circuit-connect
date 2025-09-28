@@ -20,7 +20,7 @@ const signUpSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string(),
   fullName: z.string().min(2, 'Full name must be at least 2 characters'),
-  role: z.enum(['user', 'admin', 'recycler']),
+  role: z.enum(['household_user', 'collector', 'recycler', 'regulator', 'administrator']),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -34,7 +34,7 @@ const Auth = () => {
     password: '',
     confirmPassword: '',
     fullName: '',
-    role: 'user' as 'user' | 'admin' | 'recycler',
+    role: 'household_user' as 'household_user' | 'collector' | 'recycler' | 'regulator' | 'administrator',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   
@@ -49,8 +49,8 @@ const Auth = () => {
     }
     
     const role = searchParams.get('role');
-    if (role && ['user', 'admin', 'recycler'].includes(role)) {
-      setFormData(prev => ({ ...prev, role: role as 'user' | 'admin' | 'recycler' }));
+    if (role && ['household_user', 'collector', 'recycler', 'regulator', 'administrator'].includes(role)) {
+      setFormData(prev => ({ ...prev, role: role as 'household_user' | 'collector' | 'recycler' | 'regulator' | 'administrator' }));
     }
   }, [searchParams]);
 
@@ -206,16 +206,18 @@ const Auth = () => {
                 
                 <div className="space-y-2">
                   <Label htmlFor="role">Account Type</Label>
-                  <Select value={formData.role} onValueChange={(value: 'user' | 'admin' | 'recycler') => handleInputChange('role', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="user">User - Schedule pickups & track impact</SelectItem>
-                      <SelectItem value="recycler">Recycler - Manage pickup requests</SelectItem>
-                      <SelectItem value="admin">Admin - Manage platform</SelectItem>
-                    </SelectContent>
-                  </Select>
+                   <Select value={formData.role} onValueChange={(value: 'household_user' | 'collector' | 'recycler' | 'regulator' | 'administrator') => handleInputChange('role', value)}>
+                     <SelectTrigger>
+                       <SelectValue placeholder="Select your role" />
+                     </SelectTrigger>
+                     <SelectContent>
+                       <SelectItem value="household_user">Household User - Schedule pickups & track impact</SelectItem>
+                       <SelectItem value="collector">Collector - Collect e-waste from households</SelectItem>
+                       <SelectItem value="recycler">Recycler - Process and recycle e-waste</SelectItem>
+                       <SelectItem value="regulator">Regulator - Monitor compliance & standards</SelectItem>
+                       <SelectItem value="administrator">Administrator - Manage platform</SelectItem>
+                     </SelectContent>
+                   </Select>
                   {errors.role && (
                     <p className="text-sm text-destructive">{errors.role}</p>
                   )}

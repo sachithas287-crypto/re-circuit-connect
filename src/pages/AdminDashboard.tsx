@@ -17,7 +17,7 @@ interface FeedbackItem {
   subject: string;
   message: string;
   rating: number | null;
-  status: 'pending' | 'reviewed' | 'resolved';
+  status: string;
   admin_response: string | null;
   created_at: string;
   profiles: {
@@ -57,7 +57,7 @@ const AdminDashboard = () => {
       return;
     }
 
-    if (profile && profile.role !== 'admin') {
+    if (profile && profile.role !== 'administrator') {
       toast({
         title: "Access Denied",
         description: "You don't have permission to access this page.",
@@ -67,7 +67,7 @@ const AdminDashboard = () => {
       return;
     }
 
-    if (profile?.role === 'admin') {
+    if (profile?.role === 'administrator') {
       fetchData();
     }
   }, [user, profile, navigate, toast]);
@@ -180,7 +180,7 @@ const AdminDashboard = () => {
     return null;
   }
 
-  if (profile.role !== 'admin') {
+  if (profile.role !== 'administrator') {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Card className="max-w-md mx-auto">

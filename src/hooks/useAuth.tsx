@@ -9,7 +9,7 @@ interface Profile {
   full_name: string | null;
   email: string | null;
   phone: string | null;
-  role: 'user' | 'admin' | 'recycler';
+  role: 'household_user' | 'collector' | 'recycler' | 'regulator' | 'administrator';
   address: string | null;
 }
 
@@ -17,7 +17,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
-  signUp: (email: string, password: string, fullName: string, role: 'user' | 'admin' | 'recycler') => Promise<{ error: any }>;
+  signUp: (email: string, password: string, fullName: string, role: 'household_user' | 'collector' | 'recycler' | 'regulator' | 'administrator') => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
   loading: boolean;
@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string, role: 'user' | 'admin' | 'recycler') => {
+  const signUp = async (email: string, password: string, fullName: string, role: 'household_user' | 'collector' | 'recycler' | 'regulator' | 'administrator') => {
     try {
       const redirectUrl = `${window.location.origin}/`;
       
