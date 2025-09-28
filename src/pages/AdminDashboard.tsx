@@ -79,14 +79,13 @@ const AdminDashboard = () => {
       // Fetch feedback with user profiles
       const { data: feedbackData, error: feedbackError } = await supabase
         .from('feedback')
-        .select(`
-          *,
-          profiles:user_id (
-            full_name,
-            email
-          )
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
+
+      // Get profile data separately 
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('user_id, full_name, email');
 
       if (feedbackError) throw feedbackError;
 
@@ -98,7 +97,16 @@ const AdminDashboard = () => {
 
       if (pickupError) throw pickupError;
 
-      setFeedback(feedbackData || []);
+      // Combine feedback with profile data
+      const feedbackWithProfiles = feedbackData?.map(item => {
+        const profile = profilesData?.find(p => p.user_id === item.user_id);
+        return {
+          ...item,
+          profiles: profile ? { full_name: profile.full_name || '', email: profile.email || '' } : { full_name: '', email: '' }
+        };
+      }) || [];
+
+      setFeedback(feedbackWithProfiles);
       setPickupRequests(pickupData || []);
     } catch (error: any) {
       toast({
